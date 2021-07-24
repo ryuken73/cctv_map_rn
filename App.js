@@ -1,14 +1,19 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { WebView } from 'react-native-webview'
 
 export default function App() {
   return (
-    <WebView
-      source={{uri: 'http://cctvmap.sbs.co.kr/map'}}
-      style={{marginTop: 10, marginBottom: 10}}
-    >
-    </WebView>
+    <View style={{ flex: 1 }}>
+      <StatusBar hidden={true}></StatusBar>
+      <WebView
+        // source={{uri: 'http://cctv.sbs.co.kr/map'}}
+        source={{uri: 'http://www.youtube.com'}}
+        style={{marginTop: 10, marginBottom: 10}}
+      >
+      </WebView>
+    </View>
+
   );
 }
