@@ -8,9 +8,9 @@ export default function App() {
     <View style={{ flex: 1 }}>
       <StatusBar hidden={true}></StatusBar>
       <WebView
-        // source={{uri: 'http://cctv.sbs.co.kr/map'}}
-        source={{uri: 'http://www.youtube.com'}}
-        style={{marginTop: 10, marginBottom: 10}}
+        source={{uri: 'http://cctv.sbs.co.kr/map'}}
+        // source={{uri: 'http://www.youtube.com'}}
+        // style={{marginTop: 10, marginBottom: 10}}
       >
       </WebView>
     </View>
