@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "재난 CCTV",
-    "slug": "CCTV",
+    "name": "my-app",
+    "slug": "my-app",
     "version": "1.0.0",
     "orientation": "landscape",
     "icon": "./assets/icon.png",
