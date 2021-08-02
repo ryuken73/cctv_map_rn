@@ -4,6 +4,7 @@ import { SafeAreaView, StyleSheet, Text, Dimensions, TouchableOpacity, View } fr
 import { WebView } from 'react-native-webview';
 import Svg,{Polyline} from 'react-native-svg';
 import GestureRecorderContainer from './GestureRecorderContainer';
+import { FontAwesome } from '@expo/vector-icons';
 
 const styles = StyleSheet.create({
   overlay: {
@@ -17,18 +18,25 @@ const styles = StyleSheet.create({
     zIndex: 9998
     
   },
-  overlayButton:{
+  rightAbsolutePanel: {
     flex: 1,
+    alignItems: 'center',
     position: 'absolute',
-    height: 80,
     right: 20,
     top: 10,
     opacity: 1,
     zIndex: 9999,
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingTop: 3,
-    paddingBottom: 3,
+    height: '50%',
+    padding: 10,
+    width: 130
+  },
+  drawToggleBtn:{
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    borderRadius: 6
+  },
+  drawOptionContainer: {
+    flex: 1
   }
 });
 
@@ -37,7 +45,8 @@ export default function App() {
   const [pathIndex, setPathIndex] = React.useState(0);
   const [drawMode, setDrawMode] = useState(false);
   const btnDrawModeText = drawMode ? 'ON':'OFF';
-  const btnDrawModeColor = drawMode ? 'red':'transparent';
+  const btnDrawModeColor = drawMode ? 'darkslategrey':'transparent';
+  const btnDrawModeTextColor = drawMode ? 'white':'black';
   const { width, height } = Dimensions.get('window');
 
   const onClickToggleDrawMode = React.useCallback(() => {
@@ -83,15 +92,38 @@ export default function App() {
           </GestureRecorderContainer>
         </View>
       )}
-      <View style={{...styles.overlayButton, backgroundColor:btnDrawModeColor}} >
-        <TouchableOpacity
-          onPress={onClickToggleDrawMode}
-        >
-          <Text style={{fontSize:18}}>Draw[{btnDrawModeText}]</Text>
-        </TouchableOpacity>
+      <View style={{...styles.rightAbsolutePanel}}>
+        <View style={{flex: 1}} >
+          <TouchableOpacity
+            style={{...styles.drawToggleBtn, backgroundColor:btnDrawModeColor}}
+            onPress={onClickToggleDrawMode}
+          >
+            <Text style={{fontSize:18, color:btnDrawModeTextColor}}>Draw[{btnDrawModeText}]</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{flex: 7, backgroundColor:'transparent'}} >
+          <View style={{flex: 1, flexDirection:'row', width:'100%', justifyContent:'space-evenly', alignItems:'flex-start'}}> 
+            <FontAwesome.Button 
+              size={15}
+              iconStyle={{marginRight:0}}
+              name="minus"
+              backgroundColor="darkslategrey"
+              onPress={()=>{}}
+              activeOpacity={0.2}
+            >              
+            </FontAwesome.Button>
+            <Text style={{fontSize:18}}>0</Text>
+            <FontAwesome.Button 
+              size={15}
+              iconStyle={{marginRight:0}}
+              name="plus"
+              backgroundColor="darkslategrey"
+              onPress={()=>{}}
+              activeOpacity={0.2}
+            ></FontAwesome.Button>
+          </View> 
+        </View>
       </View>
-
-
     </View>
 
   );
