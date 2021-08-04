@@ -56,6 +56,7 @@ export default function App() {
   const btnDrawModeColor = drawMode ? 'darkslategrey':'transparent';
   const btnDrawModeTextColor = drawMode ? 'white':'black';
   const controlBorderWidth = drawMode ? 3:0;
+  const controlBackgroundColor = drawMode ? 'lightgrey':'transparent';
   const { width, height } = Dimensions.get('window');
 
   const onClickToggleDrawMode = React.useCallback(() => {
@@ -101,7 +102,7 @@ export default function App() {
         </View>
       )}
 
-      <View style={{...styles.rightAbsolutePanel, borderWidth:controlBorderWidth}}>
+      <View style={{...styles.rightAbsolutePanel, backgroundColor:controlBackgroundColor, opacity:0.8, borderWidth:controlBorderWidth}}>
         <View style={{flex: 1}} >
           <TouchableOpacity
             style={{...styles.drawToggleBtn, backgroundColor:btnDrawModeColor}}
@@ -112,27 +113,30 @@ export default function App() {
         </View>
         <View style={{flex: 7, backgroundColor:'transparent', marginTop:10}} >
           {drawMode && (
-            <View style={{flex: 1, flexDirection:'row', width:'100%', justifyContent:'space-evenly', alignItems:'flex-start'}}> 
-              <IconButton
-                onPress={()=>{
-                  setStrokeWidth(strokeWidth => strokeWidth-1)
-                }}
-                name='minus-square'
-                inColor='grey'
-                outColor='black'
-              >                
-              </IconButton>
+            <View style={{flex:1, alignItems:'center'}}>
               <Text style={{fontSize:18}}>{strokeWidth}</Text>
-              <IconButton
-                onPress={()=>{
-                  setStrokeWidth(strokeWidth => strokeWidth+1)
-                }}
-                name='plus-square'
-                inColor='grey'
-                outColor='black'
-              >                
-              </IconButton>
-            </View> 
+              <View style={{flex: 1, flexDirection:'row', width:'100%', justifyContent:'space-around', alignItems:'flex-start'}}> 
+                <IconButton
+                  onPress={()=>{
+                    setStrokeWidth(strokeWidth => strokeWidth-1 > 1 ? strokeWidth-1:1)
+                  }}
+                  name='minus-square'
+                  inColor='grey'
+                  outColor='black'
+                >                
+                </IconButton>
+                <IconButton
+                  onPress={()=>{
+                    setStrokeWidth(strokeWidth => strokeWidth+1 < 100 ? strokeWidth+1:100 )
+                  }}
+                  name='plus-square'
+                  inColor='grey'
+                  outColor='black'
+                >                
+                </IconButton>
+              </View> 
+            </View>
+
           )}
         </View>
       </View>

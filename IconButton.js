@@ -12,12 +12,27 @@ function IconButton(props) {
         outColor
     } = props;
     const [color, setColor] = React.useState(outColor);
+    const [timer, setTimer] = React.useState(null);
     return (
         <TouchableWithoutFeedback                   
-            onPress={onPress}
+            onPress={onPress}            
+            onLongPress={()=>{
+                const timer = setInterval(() => {
+                    onPress()
+                },500)
+                setTimer(timer)
+            }}
+            delayLongPress={3000}
             onPressIn={()=>{setColor(inColor)}}
-            onPressOut={()=>{setColor(outColor)}
-        }>
+            onPressOut={()=>{
+                setColor(outColor);
+                setTimer(timer => {
+                    clearInterval(timer);
+                    return null
+                })
+            }}
+
+        >
             <FontAwesome
                 size={size}
                 iconStyle={iconStyle}
