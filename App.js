@@ -1,9 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useRef, useState} from 'react';
-import { SafeAreaView, StyleSheet, Text, Dimensions, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, Dimensions, TouchableOpacity, View, TouchableWithoutFeedback } from 'react-native';
 import { WebView } from 'react-native-webview';
 import Svg,{Polyline} from 'react-native-svg';
 import GestureRecorderContainer from './GestureRecorderContainer';
+import IconButton from './IconButton';
 import { FontAwesome } from '@expo/vector-icons';
 
 const styles = StyleSheet.create({
@@ -26,27 +27,35 @@ const styles = StyleSheet.create({
     top: 10,
     opacity: 1,
     zIndex: 9999,
-    height: '50%',
+    height: 'auto',
     padding: 10,
     width: 130
   },
   drawToggleBtn:{
     paddingHorizontal: 10,
-    paddingVertical: 3,
-    borderRadius: 6
+    paddingTop: 1,
+    paddingBottom: 3,
+    borderRadius: 4
   },
   drawOptionContainer: {
     flex: 1
-  }
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 export default function App() {
   const [pathContainer, setPathContainer] = useState([[]]);
   const [pathIndex, setPathIndex] = React.useState(0);
   const [drawMode, setDrawMode] = useState(false);
+  const [strokeWidth, setStrokeWidth] = useState(10);
   const btnDrawModeText = drawMode ? 'ON':'OFF';
   const btnDrawModeColor = drawMode ? 'darkslategrey':'transparent';
   const btnDrawModeTextColor = drawMode ? 'white':'black';
+  const controlBorderWidth = drawMode ? 3:0;
   const { width, height } = Dimensions.get('window');
 
   const onClickToggleDrawMode = React.useCallback(() => {
@@ -68,7 +77,6 @@ export default function App() {
         source={{uri: 'http://cctvmap.sbs.co.kr/map'}}
       >
       </WebView>
-
       {drawMode && (
         <View style={[styles.overlay, { height: "100%"}]} >
           <Svg height="100%" width="100%" viewBox={`0 0 ${width} ${height}`}>
@@ -79,7 +87,7 @@ export default function App() {
               fill="none"
               strokeOpacity={1}
               stroke={"black"}
-              strokeWidth="10"
+              strokeWidth={strokeWidth}
             />
           ))}
           </Svg>    
@@ -92,7 +100,8 @@ export default function App() {
           </GestureRecorderContainer>
         </View>
       )}
-      <View style={{...styles.rightAbsolutePanel}}>
+
+      <View style={{...styles.rightAbsolutePanel, borderWidth:controlBorderWidth}}>
         <View style={{flex: 1}} >
           <TouchableOpacity
             style={{...styles.drawToggleBtn, backgroundColor:btnDrawModeColor}}
@@ -101,27 +110,30 @@ export default function App() {
             <Text style={{fontSize:18, color:btnDrawModeTextColor}}>Draw[{btnDrawModeText}]</Text>
           </TouchableOpacity>
         </View>
-        <View style={{flex: 7, backgroundColor:'transparent'}} >
-          <View style={{flex: 1, flexDirection:'row', width:'100%', justifyContent:'space-evenly', alignItems:'flex-start'}}> 
-            <FontAwesome.Button 
-              size={15}
-              iconStyle={{marginRight:0}}
-              name="minus"
-              backgroundColor="darkslategrey"
-              onPress={()=>{}}
-              activeOpacity={0.2}
-            >              
-            </FontAwesome.Button>
-            <Text style={{fontSize:18}}>0</Text>
-            <FontAwesome.Button 
-              size={15}
-              iconStyle={{marginRight:0}}
-              name="plus"
-              backgroundColor="darkslategrey"
-              onPress={()=>{}}
-              activeOpacity={0.2}
-            ></FontAwesome.Button>
-          </View> 
+        <View style={{flex: 7, backgroundColor:'transparent', marginTop:10}} >
+          {drawMode && (
+            <View style={{flex: 1, flexDirection:'row', width:'100%', justifyContent:'space-evenly', alignItems:'flex-start'}}> 
+              <IconButton
+                onPress={()=>{
+                  setStrokeWidth(strokeWidth => strokeWidth-1)
+                }}
+                name='minus-square'
+                inColor='grey'
+                outColor='black'
+              >                
+              </IconButton>
+              <Text style={{fontSize:18}}>{strokeWidth}</Text>
+              <IconButton
+                onPress={()=>{
+                  setStrokeWidth(strokeWidth => strokeWidth+1)
+                }}
+                name='plus-square'
+                inColor='grey'
+                outColor='black'
+              >                
+              </IconButton>
+            </View> 
+          )}
         </View>
       </View>
     </View>
