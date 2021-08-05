@@ -3,6 +3,7 @@ import {StyleSheet, View, PanResponder} from 'react-native';
 
 const GestureRecorder = props => {
     const {path, onPathInit, onPathChanged, onPathReleased} = props;
+    // const {strokeColor, setColorContainer} = props;
     // console.log('# re-render Recorder:', props)
   
     const panResponder =
@@ -12,10 +13,14 @@ const GestureRecorder = props => {
           onPathInit();
         },
         onPanResponderMove: (event) => {
-          path.push({
-            x: event.nativeEvent.locationX,
-            y: event.nativeEvent.locationY,
-          })
+          console.log(event.nativeEvent)
+          const {identifier} = event.nativeEvent;
+          if(identifier === 0){
+            path.push({
+              x: event.nativeEvent.locationX,
+              y: event.nativeEvent.locationY,
+            })
+          }
           // Uncomment the next line to draw the path as the user is performing the touch. 
           // (A new array must be created so setState recognises the change and re-renders the App)
           onPathChanged([...path]);

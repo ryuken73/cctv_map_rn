@@ -5,6 +5,7 @@ import { WebView } from 'react-native-webview';
 import Svg,{Polyline} from 'react-native-svg';
 import GestureRecorderContainer from './GestureRecorderContainer';
 import IconButton from './IconButton';
+import ColorPicker from './ColorPicker';
 import { FontAwesome } from '@expo/vector-icons';
 
 const styles = StyleSheet.create({
@@ -49,9 +50,11 @@ const styles = StyleSheet.create({
 
 export default function App() {
   const [pathContainer, setPathContainer] = useState([[]]);
+  const [colorContainer, setColorContainer] = useState([]);
   const [pathIndex, setPathIndex] = React.useState(0);
   const [drawMode, setDrawMode] = useState(false);
   const [strokeWidth, setStrokeWidth] = useState(10);
+  const [strokeColor, setStrokeColor] = useState('#000000');
   const btnDrawModeText = drawMode ? 'ON':'OFF';
   const btnDrawModeColor = drawMode ? 'darkslategrey':'transparent';
   const btnDrawModeTextColor = drawMode ? 'white':'black';
@@ -63,6 +66,7 @@ export default function App() {
     //initialize path array
     setPathIndex(0);
     setPathContainer([[]]);
+    setColorContainer([]);
     //toggle draw mode
     setDrawMode(drawMode => {
       return !drawMode;
@@ -87,16 +91,20 @@ export default function App() {
               points={toString(path)}
               fill="none"
               strokeOpacity={1}
-              stroke={"black"}
+              // stroke={strokeColor}
+              stroke={colorContainer[index] || 'maroon'}
               strokeWidth={strokeWidth}
             />
           ))}
           </Svg>    
           <GestureRecorderContainer 
             pathContainer={pathContainer} 
+            colorContainer={colorContainer}
             setPathContainer={setPathContainer}
+            setColorContainer={setColorContainer}
             pathIndex={pathIndex}
             setPathIndex={setPathIndex}
+            strokeColor={strokeColor}
           >
           </GestureRecorderContainer>
         </View>
@@ -135,6 +143,7 @@ export default function App() {
                 >                
                 </IconButton>
               </View> 
+              <ColorPicker color={strokeColor} setColor={setStrokeColor}></ColorPicker>
             </View>
 
           )}
