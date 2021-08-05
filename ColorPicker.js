@@ -13,7 +13,7 @@ const ControlledColorPicker = props => {
             // scaleToWindow={true}
             paletteStyles={{}}
             icon={
-            <FontAwesome name={'check-circle-o'} size={15} color={'white'} />
+            <FontAwesome name={'check'} size={25} color={'white'} />
         }
         />
     )

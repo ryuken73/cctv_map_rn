@@ -1,11 +1,12 @@
 import React from 'react'
-import {StyleSheet, View, PanResponder} from 'react-native';
+import {StyleSheet, View, PanResponder, Platform} from 'react-native';
 
+const FIRST_TOUCH = Platform.select({
+  ios: 1,
+  android: 0
+})
 const GestureRecorder = props => {
     const {path, onPathInit, onPathChanged, onPathReleased} = props;
-    // const {strokeColor, setColorContainer} = props;
-    // console.log('# re-render Recorder:', props)
-  
     const panResponder =
       PanResponder.create({
         onMoveShouldSetPanResponder: () => true,
@@ -13,12 +14,12 @@ const GestureRecorder = props => {
           onPathInit();
         },
         onPanResponderMove: (event) => {
-          console.log(event.nativeEvent)
           const {identifier} = event.nativeEvent;
-          if(identifier === 0){
+          console.log(event.nativeEvent)
+          if(identifier === FIRST_TOUCH){
             path.push({
-              x: event.nativeEvent.locationX,
-              y: event.nativeEvent.locationY,
+              x: event.nativeEvent.pageX,
+              y: event.nativeEvent.pageY,
             })
           }
           // Uncomment the next line to draw the path as the user is performing the touch. 
