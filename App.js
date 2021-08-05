@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useRef, useState} from 'react';
+import {reloadAsync} from "expo-updates";
 import { StyleSheet, Text, Dimensions, TouchableOpacity, View, TouchableWithoutFeedback } from 'react-native';
 import { WebView } from 'react-native-webview';
 import Svg,{Polyline} from 'react-native-svg';
@@ -55,6 +56,7 @@ export default function App() {
   const [drawMode, setDrawMode] = useState(false);
   const [strokeWidth, setStrokeWidth] = useState(10);
   const [strokeColor, setStrokeColor] = useState('#000000');
+  const [webViewError, setWebViewError] = useState(false);
   const btnDrawModeText = drawMode ? 'ON':'OFF';
   const btnDrawModeColor = drawMode ? 'darkslategrey':'transparent';
   const btnDrawModeTextColor = drawMode ? 'white':'black';
@@ -73,13 +75,37 @@ export default function App() {
     })
   },[drawMode])
 
+  const onErrorWebView = React.useCallback((error)=>{
+    alert(error)
+    setWebViewError(true)
+  },[])
+  const onLoadWebView = React.useCallback(()=>{
+    setWebViewError(false)
+  },[])
+
   const toString = path => path.map(p => `${p.x},${p.y}`).join(' ');
 
   return (
     <View style={{ flex: 1 }}>
       <StatusBar hidden={true}></StatusBar>
+      {/* {onErrorWebView === true && 
+        <View>
+          <IconButton
+            onPress={()=>{
+              reloadAsync();
+            }}
+            name='reload'
+            inColor='grey'
+            outColor='black'
+          >                
+          </IconButton>
+        </View>
+      
+      } */}
       <WebView
         source={{uri: 'http://cctvmap.sbs.co.kr/map'}}
+        // onError={onErrorWebView}
+        // onLoad={onLoadWebView}
       >
       </WebView>
       {drawMode && (

@@ -15,7 +15,7 @@ const GestureRecorder = props => {
         },
         onPanResponderMove: (event) => {
           const {identifier} = event.nativeEvent;
-          console.log(event.nativeEvent)
+          // console.log(event.nativeEvent)
           if(identifier === FIRST_TOUCH){
             path.push({
               x: event.nativeEvent.pageX,
