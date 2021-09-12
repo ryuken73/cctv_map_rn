@@ -5,9 +5,20 @@ const FIRST_TOUCH = Platform.select({
   ios: 1,
   android: 0
 })
+
+const moveTooSmall = (path, currentPosition, limit) => {
+  const previousPosition = path[path.length - 1];
+  if(previousPosition === undefined){
+    return false;
+  }
+  const dx = currentPosition.x - previousPosition.x;
+  const dy = currentPosition.y - previousPosition.y;
+  return dx * dx + dy * dy < limit;
+
+}
 const GestureRecorder = props => {
     const {path, onPathInit, onPathChanged, onPathReleased} = props;
-    const panResponder =
+  const panResponder =
       PanResponder.create({
         onMoveShouldSetPanResponder: () => true,
         onPanResponderGrant: () => {  
@@ -15,12 +26,20 @@ const GestureRecorder = props => {
         },
         onPanResponderMove: (event) => {
           const {identifier} = event.nativeEvent;
-          // console.log(event.nativeEvent)
+          // console.log(identifier)
+          // track only single path (prevent making multi-path when multi-touched)
+          const currentPosition = {
+            x: event.nativeEvent.pageX,
+            y: event.nativeEvent.pageY,
+          }
+          const MOVE_TOO_SMALL = moveTooSmall(path, currentPosition, 10);
+
           if(identifier === FIRST_TOUCH){
-            path.push({
-              x: event.nativeEvent.pageX,
-              y: event.nativeEvent.pageY,
-            })
+            if(MOVE_TOO_SMALL){
+              path[path.length - 1] = currentPosition;
+            } else {
+              path.push(currentPosition);
+            }
           }
           // Uncomment the next line to draw the path as the user is performing the touch. 
           // (A new array must be created so setState recognises the change and re-renders the App)
