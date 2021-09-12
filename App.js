@@ -3,11 +3,17 @@ import React, {useRef, useState} from 'react';
 import {reloadAsync} from "expo-updates";
 import { StyleSheet, Text, Dimensions, TouchableOpacity, View, TouchableWithoutFeedback } from 'react-native';
 import { WebView } from 'react-native-webview';
-import Svg,{Polyline} from 'react-native-svg';
+import Svg,{Polyline, Path} from 'react-native-svg';
 import GestureRecorderContainer from './GestureRecorderContainer';
 import IconButton from './IconButton';
 import ColorPicker from './ColorPicker';
 import { FontAwesome } from '@expo/vector-icons';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import * as d3 from 'd3'
+
+const Stack = createNativeStackNavigator();
+const CURVE_LEVEL = 1;
 
 const styles = StyleSheet.create({
   overlay: {
@@ -49,6 +55,24 @@ const styles = StyleSheet.create({
   },
 });
 
+const Weather = () => {
+  return <WebView
+            source={{uri: 'https://www.weather.go.kr/wgis-nuri/html/map.html'}}
+            // onError={onErrorWebView}
+            // onLoad={onLoadWebView}
+          >
+          </WebView>
+}
+
+const CCTV = () => {
+  return <WebView
+            source={{uri: 'https://www.naver.com'}}
+            // onError={onErrorWebView}
+            // onLoad={onLoadWebView}
+          >
+          </WebView>
+}
+
 export default function App() {
   const [pathContainer, setPathContainer] = useState([[]]);
   const [colorContainer, setColorContainer] = useState([]);
@@ -85,6 +109,11 @@ export default function App() {
 
   const toString = path => path.map(p => `${p.x},${p.y}`).join(' ');
 
+  const toSvgPath = d3.line()
+                    .x((p) => p.x)
+                    .y((p) => p.y)
+                    .curve(d3.curveBasis); 
+
   return (
     <View style={{ flex: 1 }}>
       <StatusBar hidden={true}></StatusBar>
@@ -102,22 +131,33 @@ export default function App() {
         </View>
       
       } */}
-      <WebView
-        source={{uri: 'http://cctvmap.sbs.co.kr/map'}}
-        // onError={onErrorWebView}
-        // onLoad={onLoadWebView}
-      >
-      </WebView>
+      <NavigationContainer>
+        <Stack.Navigator 
+          initialRouteName="Weather"
+          screenOptions={({ route, navigation }) => ({
+            headerShown: false,
+            gestureEnabled: true
+          })}  
+        >
+          <Stack.Screen name="Weather" component={Weather}   />
+          <Stack.Screen name="CCTV" component={CCTV}  />
+        </Stack.Navigator>
+
+      </NavigationContainer>
+
       {drawMode && (
         <View style={[styles.overlay, { height: "100%"}]} >
           <Svg height="100%" width="100%" viewBox={`0 0 ${width} ${height}`}>
           {pathContainer.map((path, index) => (
-            <Polyline
+            <Path
               key={index}
-              points={toString(path)}
+              // points={toString(path)}
+              d={toSvgPath(path)}
               fill="none"
               strokeOpacity={1}
-              // stroke={strokeColor}
+              strokeLinejoin="round"
+              strokeLinecap="round"
+              stroke={strokeColor}
               stroke={colorContainer[index] || 'maroon'}
               strokeWidth={strokeWidth}
             />
