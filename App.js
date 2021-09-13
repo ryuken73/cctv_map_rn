@@ -2,17 +2,24 @@ import { StatusBar } from 'expo-status-bar';
 import React, {useRef, useState} from 'react';
 import {reloadAsync} from "expo-updates";
 import { StyleSheet, Text, Dimensions, TouchableOpacity, View, TouchableWithoutFeedback } from 'react-native';
-import { WebView } from 'react-native-webview';
+// import { WebView } from 'react-native-webview';
 import Svg,{Polyline, Path} from 'react-native-svg';
 import GestureRecorderContainer from './GestureRecorderContainer';
 import IconButton from './IconButton';
 import ColorPicker from './ColorPicker';
+import WebViewCommon from './WebViewCommon';
 import { FontAwesome } from '@expo/vector-icons';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, createNavigationContainerRef } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as d3 from 'd3'
 
 const Stack = createNativeStackNavigator();
+const navigationRef = createNavigationContainerRef();
+const navigate = (name, params) => {
+  if (navigationRef.isReady()) {
+    navigationRef.navigate(name, params);
+  }
+}
 const CURVE_LEVEL = 1;
 
 const styles = StyleSheet.create({
@@ -34,7 +41,7 @@ const styles = StyleSheet.create({
     right: 20,
     top: 10,
     opacity: 1,
-    zIndex: 9999,
+    zIndex: 9998,
     height: 'auto',
     padding: 10,
     width: 130
@@ -67,22 +74,26 @@ const styles = StyleSheet.create({
   },
 });
 
-const Weather = () => {
-  return <WebView
+const Weather = ({navigation, route}) => {
+  return <WebViewCommon
             source={{uri: 'https://www.weather.go.kr/wgis-nuri/html/map.html'}}
+            navigation={navigation}
+            route={route}
             // onError={onErrorWebView}
             // onLoad={onLoadWebView}
           >
-          </WebView>
+          </WebViewCommon>
 }
 
-const CCTV = () => {
-  return <WebView
-            source={{uri: 'https://www.naver.com'}}
+const CCTV = ({navigation, route}) => {
+  return <WebViewCommon
+            source={{uri: 'http://cctvmap.sbs.co.kr/map'}}
+            navigation={navigation}
+            route={route}
             // onError={onErrorWebView}
             // onLoad={onLoadWebView}
           >
-          </WebView>
+          </WebViewCommon>
 }
 
 export default function App() {
@@ -173,18 +184,17 @@ export default function App() {
         </View>
       
       } */}
-      <NavigationContainer>
+      <NavigationContainer ref={navigationRef}>
         <Stack.Navigator 
           initialRouteName="Weather"
           screenOptions={({ route, navigation }) => ({
-            headerShown: false,
+            headerShown: true,
             gestureEnabled: true
           })}  
         >
-          <Stack.Screen name="Weather" component={Weather}   />
-          <Stack.Screen name="CCTV" component={CCTV}  />
+          <Stack.Screen name="Weather" options={{detachPreviousScreen:false}} component={Weather}   />
+          <Stack.Screen name="CCTV" options={{detachPreviousScreen:false}} component={CCTV}  />
         </Stack.Navigator>
-
       </NavigationContainer>
 
       {drawMode && (
@@ -218,16 +228,18 @@ export default function App() {
         </View>
       )}
 
-      <View style={{...styles.leftAbsolutePanel, backgroundColor:'lightgrey', opacity:0.8, borderWidth:3}}>
-        <View style={{flex: 1}} >
-          <TouchableOpacity
-            style={{...styles.drawToggleBtn, backgroundColor:'darkslategrey'}}
-            onPress={onClickToggleDrawMode}
-          >
-            <Text style={{fontSize:18, color:'white'}}>CCTV</Text>
-          </TouchableOpacity>
+      {drawMode && (
+        <View style={{...styles.leftAbsolutePanel, backgroundColor:'transparent', opacity:1}}>
+            <View style={{flex: 1}} >
+            <TouchableOpacity
+                style={{...styles.drawToggleBtn, backgroundColor:'lightgrey'}}
+            >
+                <Text style={{fontSize:18, color:'white'}}>Disabled</Text>
+            </TouchableOpacity>
+            </View>
         </View>
-      </View>
+      )}
+
 
       <View style={{...styles.rightAbsolutePanel, backgroundColor:controlBackgroundColor, opacity:0.8, borderWidth:controlBorderWidth}}>
         <View style={{flex: 1}} >
