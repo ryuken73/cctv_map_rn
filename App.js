@@ -39,6 +39,18 @@ const styles = StyleSheet.create({
     padding: 10,
     width: 130
   },
+  leftAbsolutePanel: {
+    flex: 1,
+    alignItems: 'center',
+    position: 'absolute',
+    left: 20,
+    bottom: 10,
+    opacity: 1,
+    zIndex: 9999,
+    height: 'auto',
+    padding: 10,
+    width: 130
+  },
   drawToggleBtn:{
     paddingHorizontal: 10,
     paddingTop: 1,
@@ -98,6 +110,36 @@ export default function App() {
       return !drawMode;
     })
   },[drawMode])
+
+  const onClickClear = React.useCallback(() => {
+    setColorContainer([])
+    setPathContainer([[]])
+    setPathIndex(0)
+  })
+
+  const onClickUndo = React.useCallback(() => {
+    console.log(pathContainer);
+    setColorContainer(colorContainer => {
+      if(colorContainer.length < 2){
+        return [];
+      }
+      return [...colorContainer.splice(0, colorContainer.length - 1)]
+
+    })
+    setPathContainer(pathContainer => {
+      if(pathContainer.length === 1){
+        return [[]]
+      }
+      pathContainer.splice(pathContainer.length-2,1)
+      return [...pathContainer]
+    })
+    setPathIndex(pathIndex => {
+      if(pathIndex === 0){
+        return 0
+      }
+      return pathIndex - 1;
+    })
+  },[pathContainer])
 
   const onErrorWebView = React.useCallback((error)=>{
     alert(error)
@@ -176,6 +218,17 @@ export default function App() {
         </View>
       )}
 
+      <View style={{...styles.leftAbsolutePanel, backgroundColor:'lightgrey', opacity:0.8, borderWidth:3}}>
+        <View style={{flex: 1}} >
+          <TouchableOpacity
+            style={{...styles.drawToggleBtn, backgroundColor:'darkslategrey'}}
+            onPress={onClickToggleDrawMode}
+          >
+            <Text style={{fontSize:18, color:'white'}}>CCTV</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
       <View style={{...styles.rightAbsolutePanel, backgroundColor:controlBackgroundColor, opacity:0.8, borderWidth:controlBorderWidth}}>
         <View style={{flex: 1}} >
           <TouchableOpacity
@@ -210,6 +263,23 @@ export default function App() {
                 </IconButton>
               </View> 
               <ColorPicker color={strokeColor} setColor={setStrokeColor}></ColorPicker>
+              <View style={{marginTop:50}}>
+                <TouchableOpacity
+                  style={{...styles.drawToggleBtn, alignItems:'center', justifyContent: 'center', height:50, width:100, backgroundColor:"darkred"}}
+                  onPress={onClickUndo}
+                >
+                  <Text style={{fontSize:18, color:btnDrawModeTextColor}}>Undo</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={{marginTop:40}}>
+                <TouchableOpacity
+                  style={{...styles.drawToggleBtn, alignItems:'center', justifyContent: 'center', height:50, width:100, backgroundColor:"darkred"}}
+                  onPress={onClickClear}
+                >
+                  <Text style={{fontSize:18, color:btnDrawModeTextColor}}>Clear</Text>
+                </TouchableOpacity>
+              </View>
+
             </View>
 
           )}
