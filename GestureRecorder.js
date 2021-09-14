@@ -32,7 +32,7 @@ const GestureRecorder = props => {
             x: event.nativeEvent.pageX,
             y: event.nativeEvent.pageY,
           }
-          const MOVE_TOO_SMALL = moveTooSmall(path, currentPosition, 10);
+          const MOVE_TOO_SMALL = moveTooSmall(path, currentPosition, 0);
 
           if(identifier === FIRST_TOUCH){
             if(MOVE_TOO_SMALL){
@@ -41,6 +41,7 @@ const GestureRecorder = props => {
               path.push(currentPosition);
             }
           }
+
           // Uncomment the next line to draw the path as the user is performing the touch. 
           // (A new array must be created so setState recognises the change and re-renders the App)
           onPathChanged([...path]);

@@ -11,9 +11,12 @@ import WebViewCommon from './WebViewCommon';
 import { FontAwesome } from '@expo/vector-icons';
 import { NavigationContainer, createNavigationContainerRef } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import * as d3 from 'd3'
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
+
 const navigationRef = createNavigationContainerRef();
 const navigate = (name, params) => {
   if (navigationRef.isReady()) {
@@ -79,8 +82,6 @@ const Weather = ({navigation, route}) => {
             source={{uri: 'https://www.weather.go.kr/wgis-nuri/html/map.html'}}
             navigation={navigation}
             route={route}
-            // onError={onErrorWebView}
-            // onLoad={onLoadWebView}
           >
           </WebViewCommon>
 }
@@ -185,16 +186,27 @@ export default function App() {
       
       } */}
       <NavigationContainer ref={navigationRef}>
-        <Stack.Navigator 
-          initialRouteName="Weather"
+        <Tab.Navigator 
+          initialRouteName="CCTV"
           screenOptions={({ route, navigation }) => ({
-            headerShown: true,
+            headerShown: false,
             gestureEnabled: true
           })}  
         >
-          <Stack.Screen name="Weather" options={{detachPreviousScreen:false}} component={Weather}   />
-          <Stack.Screen name="CCTV" options={{detachPreviousScreen:false}} component={CCTV}  />
-        </Stack.Navigator>
+          <Tab.Screen 
+            name="Weather"       
+            options={{
+              tabBarStyle: {height:0},
+            }} 
+            component={Weather}   />
+          <Tab.Screen 
+            name="CCTV"        
+            options={{
+              tabBarStyle: {height:0},
+            }} 
+            component={CCTV}  
+        />
+        </Tab.Navigator>
       </NavigationContainer>
 
       {drawMode && (

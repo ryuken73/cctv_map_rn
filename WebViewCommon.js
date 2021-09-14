@@ -26,9 +26,9 @@ const WebViewCommon = props => {
     const {source, navigation, route} = props;
     const gotoPage = React.useCallback(() => {
         if(route.name === 'CCTV'){
-            navigation.push('Weather');
+            navigation.navigate('Weather');
         } else {
-            navigation.push('CCTV');
+            navigation.navigate('CCTV');
         }
     },[route, navigation])
     const btnText = route.name === 'CCTV' ? 'Weather' : 'CCTV';

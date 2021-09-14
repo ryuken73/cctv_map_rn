@@ -7,9 +7,7 @@ const GestureRecorderContainer = props => {
     const {strokeColor} = props;
     const {pathIndex, setPathIndex} = props;
     const onPathInit = React.useCallback(() => {
-      console.log('### initialized');
       setColorContainer(colorContainer => {
-        console.log(pathIndex, strokeColor, colorContainer)
         return [...colorContainer, strokeColor]
       })
     },[strokeColor])
