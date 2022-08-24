@@ -85,6 +85,14 @@ const Weather = ({navigation, route}) => {
           >
           </WebViewCommon>
 }
+const Earth = ({navigation, route}) => {
+  return <WebViewCommon
+            source={{uri: 'https://earth.nullschool.net/ko/#current/wind/surface/level/orthographic=-232.88,37.51,2250'}}
+            navigation={navigation}
+            route={route}
+          >
+          </WebViewCommon>
+}
 
 const CCTV = ({navigation, route}) => {
   return <WebViewCommon
@@ -199,6 +207,12 @@ export default function App() {
               tabBarStyle: {height:0},
             }} 
             component={Weather}   />
+          <Tab.Screen 
+            name="Earth"       
+            options={{
+              tabBarStyle: {height:0},
+            }} 
+            component={Earth}   />
           <Tab.Screen 
             name="CCTV"        
             options={{

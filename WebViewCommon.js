@@ -3,18 +3,6 @@ import {View, StyleSheet, TouchableOpacity, Text} from 'react-native'
 import {WebView} from 'react-native-webview';
 
 const styles = StyleSheet.create({
-    leftAbsolutePanel: {
-      flex: 1,
-      alignItems: 'center',
-      position: 'absolute',
-      left: 20,
-      bottom: 10,
-      opacity: 1,
-      zIndex: 9999,
-      height: 'auto',
-      padding: 10,
-      width: 130
-    },
     drawToggleBtn:{
       paddingHorizontal: 10,
       paddingTop: 1,
@@ -22,16 +10,39 @@ const styles = StyleSheet.create({
       borderRadius: 4
     }
 });
+
+const dStyles = StyleSheet.create({
+    verticalTop: {
+        top: 10
+    },
+    vertialBottom: {
+        bottom: 10
+    },
+    leftAbsolutePanel: {
+      flex: 1,
+      position: 'absolute',
+      left: 20,
+      opacity: 1,
+      zIndex: 9999,
+      height: 'auto',
+      padding: 10,
+      width: 180 
+    },
+})
+const pageNames =['CCTV', 'Weather', 'Earth'];
 const WebViewCommon = props => {
     const {source, navigation, route} = props;
-    const gotoPage = React.useCallback(() => {
-        if(route.name === 'CCTV'){
-            navigation.navigate('Weather');
-        } else {
-            navigation.navigate('CCTV');
+    const currentPage = route.name; // 'CCTV', 'Weahert' or 'Earth
+    const targetPages = React.useMemo(() => { 
+        return pageNames.filter(pageName => pageName !== currentPage);
+    },[currentPage]);
+
+    const gotoPage = React.useCallback(pageName => {
+        return event => {
+            navigation.navigate(pageName);
         }
-    },[route, navigation])
-    const btnText = route.name === 'CCTV' ? 'Weather' : 'CCTV';
+    },[navigation])
+        
     return (
         <>
             <WebView
@@ -39,13 +50,21 @@ const WebViewCommon = props => {
             >
             </WebView>
 
-            <View style={{...styles.leftAbsolutePanel, backgroundColor:'transparent', opacity:0.8}}>
-                <View style={{flex: 1}} >
-                <TouchableOpacity
-                    style={{...styles.drawToggleBtn, backgroundColor:'darkslategrey'}}
-                    onPress={gotoPage}                >
-                    <Text style={{fontSize:18, color:'white'}}>{btnText}</Text>
-                </TouchableOpacity>
+            <View 
+             style={currentPage === 'Earth' ? 
+                {...dStyles.leftAbsolutePanel, ...dStyles.verticalTop, backgroundColor:'transparent', opacity:0.8} :
+                {...dStyles.leftAbsolutePanel, ...dStyles.vertialBottom, backgroundColor:'transparent', opacity:0.8} 
+             }
+            >
+                <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}} >
+                    {targetPages.map(pageName => (
+                        <TouchableOpacity
+                            style={{...styles.drawToggleBtn, backgroundColor:'darkslategrey'}}
+                            onPress={gotoPage(pageName)}
+                        >
+                            <Text style={{fontSize:18, color:'white'}}>{pageName}</Text>
+                        </TouchableOpacity>
+                    ))}
                 </View>
             </View>
         </>
