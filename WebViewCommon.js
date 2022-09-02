@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {startTransition, useRef, useState} from 'react';
 import {View, StyleSheet, TouchableOpacity, Text} from 'react-native'
 import {WebView} from 'react-native-webview';
 
@@ -7,26 +7,22 @@ const styles = StyleSheet.create({
       paddingHorizontal: 10,
       paddingTop: 1,
       paddingBottom: 3,
+      marginRight: 5,
       borderRadius: 4
     }
 });
 
 const dStyles = StyleSheet.create({
-    verticalTop: {
-        top: 10
-    },
-    vertialBottom: {
-        bottom: 10
-    },
     leftAbsolutePanel: {
       flex: 1,
+      justifyContent: 'flex-start',
       position: 'absolute',
-      left: 20,
+      left: 90,
+      bottom: 5,
       opacity: 1,
       zIndex: 9999,
       height: 'auto',
-      padding: 10,
-      width: 180 
+      padding: 10
     },
 })
 const pageNames =['CCTV', 'Weather', 'Earth'];
@@ -51,13 +47,10 @@ const WebViewCommon = props => {
             </WebView>
 
             <View 
-             style={currentPage === 'Earth' ? 
-                {...dStyles.leftAbsolutePanel, ...dStyles.verticalTop, backgroundColor:'transparent', opacity:0.8} :
-                {...dStyles.leftAbsolutePanel, ...dStyles.vertialBottom, backgroundColor:'transparent', opacity:0.8} 
-             }
+             style={{...dStyles.leftAbsolutePanel, backgroundColor:'transparent', opacity:0.8}}
             >
                 <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}} >
-                    {targetPages.map(pageName => (
+                    {pageNames.map(pageName => (
                         <TouchableOpacity
                             style={{...styles.drawToggleBtn, backgroundColor:'darkslategrey'}}
                             onPress={gotoPage(pageName)}
