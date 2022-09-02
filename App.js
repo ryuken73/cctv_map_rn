@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';``
 import {reloadAsync} from "expo-updates";
 import { StyleSheet, Text, Dimensions, TouchableOpacity, View, TouchableWithoutFeedback } from 'react-native';
 // import { WebView } from 'react-native-webview';
@@ -8,6 +8,7 @@ import GestureRecorderContainer from './GestureRecorderContainer';
 import IconButton from './IconButton';
 import ColorPicker from './ColorPicker';
 import WebViewCommon from './WebViewCommon';
+import NavButtons from './NavButtons';
 import { FontAwesome } from '@expo/vector-icons';
 import { NavigationContainer, createNavigationContainerRef } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -18,11 +19,6 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const navigationRef = createNavigationContainerRef();
-const navigate = (name, params) => {
-  if (navigationRef.isReady()) {
-    navigationRef.navigate(name, params);
-  }
-}
 const CURVE_LEVEL = 1;
 
 const styles = StyleSheet.create({
@@ -77,6 +73,7 @@ const styles = StyleSheet.create({
   },
 });
 
+const pageNames =['CCTV', 'Weather', 'Earth', '제주'];
 const Weather = ({navigation, route}) => {
   return <WebViewCommon
             source={{uri: 'https://www.weather.go.kr/wgis-nuri/html/map.html'}}
@@ -93,14 +90,20 @@ const Earth = ({navigation, route}) => {
           >
           </WebViewCommon>
 }
-
 const CCTV = ({navigation, route}) => {
   return <WebViewCommon
             source={{uri: 'http://cctvmap.sbs.co.kr/map'}}
             navigation={navigation}
             route={route}
-            // onError={onErrorWebView}
-            // onLoad={onLoadWebView}
+            setBuiltInZoomControls={true}
+          >
+          </WebViewCommon>
+}
+const JEJU = ({navigation, route}) => {
+  return <WebViewCommon
+            source={{uri: 'http://bangjae.jeju.go.kr/realtimeinfor/cctv/danger.htm'}}
+            navigation={navigation}
+            route={route}
           >
           </WebViewCommon>
 }
@@ -179,20 +182,6 @@ export default function App() {
   return (
     <View style={{ flex: 1 }}>
       <StatusBar hidden={true}></StatusBar>
-      {/* {onErrorWebView === true && 
-        <View>
-          <IconButton
-            onPress={()=>{
-              reloadAsync();
-            }}
-            name='reload'
-            inColor='grey'
-            outColor='black'
-          >                
-          </IconButton>
-        </View>
-      
-      } */}
       <NavigationContainer ref={navigationRef}>
         <Tab.Navigator 
           initialRouteName="CCTV"
@@ -206,23 +195,32 @@ export default function App() {
             options={{
               tabBarStyle: {height:0},
             }} 
-            component={Weather}   />
+            component={Weather}   
+          />
           <Tab.Screen 
             name="Earth"       
             options={{
               tabBarStyle: {height:0},
             }} 
-            component={Earth}   />
+            component={Earth}   
+          />
           <Tab.Screen 
             name="CCTV"        
             options={{
               tabBarStyle: {height:0},
             }} 
             component={CCTV}  
-        />
+          />
+          <Tab.Screen 
+            name="제주"        
+            options={{
+              tabBarStyle: {height:0},
+            }} 
+            component={JEJU}  
+          />
         </Tab.Navigator>
+        {!drawMode && <NavButtons pageNames={pageNames} drawMode={drawMode}></NavButtons>}
       </NavigationContainer>
-
       {drawMode && (
         <View style={[styles.overlay, { height: "100%"}]} >
           <Svg height="100%" width="100%" viewBox={`0 0 ${width} ${height}`}>
@@ -253,19 +251,6 @@ export default function App() {
           </GestureRecorderContainer>
         </View>
       )}
-
-      {drawMode && (
-        <View style={{...styles.leftAbsolutePanel, backgroundColor:'transparent', opacity:1}}>
-            <View style={{flex: 1}} >
-            <TouchableOpacity
-                style={{...styles.drawToggleBtn, backgroundColor:'lightgrey'}}
-            >
-                <Text style={{fontSize:18, color:'white'}}>Disabled</Text>
-            </TouchableOpacity>
-            </View>
-        </View>
-      )}
-
 
       <View style={{...styles.rightAbsolutePanel, backgroundColor:controlBackgroundColor, opacity:0.8, borderWidth:controlBorderWidth}}>
         <View style={{flex: 1}} >
