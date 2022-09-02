@@ -13,9 +13,12 @@ import { FontAwesome } from '@expo/vector-icons';
 import { NavigationContainer, createNavigationContainerRef } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator, TransitionSpecs } from '@react-navigation/stack';
+// import { NavigationContainer, createStackNavigator, TransitionSpecs } from '@react-navigation/stack';
 import * as d3 from 'd3'
 
 const Stack = createNativeStackNavigator();
+// const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const navigationRef = createNavigationContainerRef();
@@ -179,6 +182,14 @@ export default function App() {
                     .y((p) => p.y)
                     .curve(d3.curveBasis); 
 
+  const transitionSpec = {
+    open: TransitionSpecs.FadeInFromBottomAndroidSpec ,
+    close: TransitionSpecs.FadeOutFromBottomAndroidSpec ,              
+  }
+  const options = {
+    tabBarStyle: {height:0}
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <StatusBar hidden={true}></StatusBar>
@@ -192,30 +203,22 @@ export default function App() {
         >
           <Tab.Screen 
             name="Weather"       
-            options={{
-              tabBarStyle: {height:0},
-            }} 
+            options={options}
             component={Weather}   
           />
           <Tab.Screen 
             name="Earth"       
-            options={{
-              tabBarStyle: {height:0},
-            }} 
+            options={options}
             component={Earth}   
           />
           <Tab.Screen 
             name="CCTV"        
-            options={{
-              tabBarStyle: {height:0},
-            }} 
+            options={options}
             component={CCTV}  
           />
           <Tab.Screen 
             name="제주"        
-            options={{
-              tabBarStyle: {height:0},
-            }} 
+            options={options}
             component={JEJU}  
           />
         </Tab.Navigator>

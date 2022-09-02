@@ -7,7 +7,6 @@ const WebViewCommon = props => {
         <>
             <WebView
                 source={source}
-                scalesPageToFit={false}
             >
             </WebView>
         </>
