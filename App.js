@@ -76,7 +76,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const pageNames =['CCTV', 'Weather', 'Earth', '제주'];
+// const pageNames =['CCTV', 'Weather', 'Earth', '제주'];
+const pageNames =['CCTV', 'Weather', 'Earth'];
 const Weather = ({navigation, route}) => {
   return <WebViewCommon
             source={{uri: 'https://www.weather.go.kr/wgis-nuri/html/map.html'}}
@@ -102,14 +103,14 @@ const CCTV = ({navigation, route}) => {
           >
           </WebViewCommon>
 }
-const JEJU = ({navigation, route}) => {
-  return <WebViewCommon
-            source={{uri: 'http://bangjae.jeju.go.kr/realtimeinfor/cctv/danger.htm'}}
-            navigation={navigation}
-            route={route}
-          >
-          </WebViewCommon>
-}
+// const JEJU = ({navigation, route}) => {
+//   return <WebViewCommon
+//             source={{uri: 'http://bangjae.jeju.go.kr/realtimeinfor/cctv/danger.htm'}}
+//             navigation={navigation}
+//             route={route}
+//           >
+//           </WebViewCommon>
+// }
 
 export default function App() {
   const [pathContainer, setPathContainer] = useState([[]]);
@@ -216,11 +217,11 @@ export default function App() {
             options={options}
             component={CCTV}  
           />
-          <Tab.Screen 
+          {/* <Tab.Screen 
             name="제주"        
             options={options}
             component={JEJU}  
-          />
+          /> */}
         </Tab.Navigator>
         {!drawMode && <NavButtons pageNames={pageNames} drawMode={drawMode}></NavButtons>}
       </NavigationContainer>
