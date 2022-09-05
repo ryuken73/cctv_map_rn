@@ -16,6 +16,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator, TransitionSpecs } from '@react-navigation/stack';
 // import { NavigationContainer, createStackNavigator, TransitionSpecs } from '@react-navigation/stack';
 import * as d3 from 'd3'
+import MaterialIconButton from './MaterialIconButton';
+import ColorPickerSmall from './ColorPickerSmall';
+import IoniconButton from './IoniconButton';
 
 const Stack = createNativeStackNavigator();
 // const Stack = createStackNavigator();
@@ -41,12 +44,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     position: 'absolute',
     right: 20,
-    top: 10,
+    top: 20,
     opacity: 1,
     zIndex: 9998,
     height: 'auto',
     padding: 10,
-    width: 130
+    width: 110
   },
   leftAbsolutePanel: {
     flex: 1,
@@ -124,7 +127,7 @@ export default function App() {
   const btnDrawModeColor = drawMode ? 'darkslategrey':'transparent';
   const btnDrawModeTextColor = drawMode ? 'white':'black';
   const controlBorderWidth = drawMode ? 3:0;
-  const controlBackgroundColor = drawMode ? 'lightgrey':'transparent';
+  const controlBackgroundColor = drawMode ? 'midnightblue':'transparent';
   const { width, height } = Dimensions.get('window');
 
   const onClickToggleDrawMode = React.useCallback(() => {
@@ -256,58 +259,59 @@ export default function App() {
         </View>
       )}
 
-      <View style={{...styles.rightAbsolutePanel, backgroundColor:controlBackgroundColor, opacity:0.8, borderWidth:controlBorderWidth}}>
-        <View style={{flex: 1}} >
-          <TouchableOpacity
-            style={{...styles.drawToggleBtn, backgroundColor:btnDrawModeColor}}
-            onPress={onClickToggleDrawMode}
-          >
-            <Text style={{fontSize:18, color:btnDrawModeTextColor}}>Draw[{btnDrawModeText}]</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{flex: 7, backgroundColor:'transparent', marginTop:10}} >
-          {drawMode && (
-            <View style={{flex:1, alignItems:'center'}}>
-              <Text style={{fontSize:18}}>{strokeWidth}</Text>
-              <View style={{flex: 1, flexDirection:'row', width:'100%', justifyContent:'space-around', alignItems:'flex-start'}}> 
-                <IconButton
-                  onPress={()=>{
-                    setStrokeWidth(strokeWidth => strokeWidth-1 > 1 ? strokeWidth-1:1)
-                  }}
-                  name='minus-square'
-                  inColor='grey'
-                  outColor='black'
-                >                
-                </IconButton>
-                <IconButton
-                  onPress={()=>{
-                    setStrokeWidth(strokeWidth => strokeWidth+1 < 100 ? strokeWidth+1:100 )
-                  }}
-                  name='plus-square'
-                  inColor='grey'
-                  outColor='black'
-                >                
-                </IconButton>
-              </View> 
-              <ColorPicker color={strokeColor} setColor={setStrokeColor}></ColorPicker>
-              <View style={{marginTop:50}}>
-                <TouchableOpacity
-                  style={{...styles.drawToggleBtn, alignItems:'center', justifyContent: 'center', height:50, width:100, backgroundColor:"darkred"}}
-                  onPress={onClickUndo}
-                >
-                  <Text style={{fontSize:18, color:btnDrawModeTextColor}}>Undo</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={{marginTop:40}}>
-                <TouchableOpacity
-                  style={{...styles.drawToggleBtn, alignItems:'center', justifyContent: 'center', height:50, width:100, backgroundColor:"darkred"}}
-                  onPress={onClickClear}
-                >
-                  <Text style={{fontSize:18, color:btnDrawModeTextColor}}>Clear</Text>
-                </TouchableOpacity>
-              </View>
+      <View style={{
+        ...styles.rightAbsolutePanel, 
+        backgroundColor:controlBackgroundColor, 
+        opacity:0.8, 
+        borderWidth:0,
+        borderRadius:15 
 
+      }}>
+        <View style={{flex: 1, flexDirection: 'row', width: '100%', justifyContent: 'space-evenly'}} >
+          <MaterialIconButton 
+            name="pencil-circle-outline"
+            onPress={onClickToggleDrawMode}
+          ></MaterialIconButton>
+          <IoniconButton 
+            name="arrow-undo-circle-outline"
+            onPress={onClickUndo}
+          ></IoniconButton>
+          <MaterialIconButton
+            name="delete-circle-outline"
+            onPress={onClickClear}
+          ></MaterialIconButton>
+        </View>
+        <View>
+          {drawMode && (
+            <View>
+              <ColorPickerSmall
+                color={strokeColor} 
+                setColor={setStrokeColor}
+              ></ColorPickerSmall>
             </View>
+            // <View style={{flex:1, alignItems:'center'}}>
+            //   <Text style={{fontSize:18}}>{strokeWidth}</Text>
+            //   <View style={{flex: 1, flexDirection:'row', width:'100%', justifyContent:'space-around', alignItems:'flex-start'}}> 
+            //     <IconButton
+            //       onPress={()=>{
+            //         setStrokeWidth(strokeWidth => strokeWidth-1 > 1 ? strokeWidth-1:1)
+            //       }}
+            //       name='minus-square'
+            //       inColor='grey'
+            //       outColor='black'
+            //     >                
+            //     </IconButton>
+            //     <IconButton
+            //       onPress={()=>{
+            //         setStrokeWidth(strokeWidth => strokeWidth+1 < 100 ? strokeWidth+1:100 )
+            //       }}
+            //       name='plus-square'
+            //       inColor='grey'
+            //       outColor='black'
+            //     >                
+            //     </IconButton>
+            //   </View> 
+            // </View>
 
           )}
         </View>
