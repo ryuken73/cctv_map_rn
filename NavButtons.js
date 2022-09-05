@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, TouchableOpacity, Text} from 'react-native'
+import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons'; 
 import { useNavigation } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
@@ -47,7 +48,7 @@ const NavButtons = props => {
                     alignItems: 'center', 
                     justifyContent: 'space-around',
                     opacity: drawMode ? 0.1 : 1,
-                    height: 25,
+                    height: 30,
                 }} >
                     {pageNames.map(pageName => (
                         <TouchableOpacity
@@ -57,13 +58,16 @@ const NavButtons = props => {
                                 // flexDirection: 'column',
                                 backgroundColor: drawMode ? 'lightgrey':'darkslategrey',
                                 height: '100%',
-                                minWidth: 60
+                                minWidth: 30
                             }}
                             onPress={gotoPage(pageName)}
                         >
-                            <View style={{flex:1, alignItems:'center', justifyContent: 'center'}}>
+                            {pageName === 'CCTV' && <MaterialCommunityIcons name="cctv" size={24} color="white" />}
+                            {pageName === 'Weather' && <MaterialCommunityIcons name="weather-partly-rainy" size={24} color="white" />}
+                            {pageName === 'Earth' && <Ionicons name="earth" size={24} color="white" />}
+                            {/* <View style={{flex:1, alignItems:'center', justifyContent: 'center'}}>
                             <Text style={{fontSize:18, color:'white'}}>{pageName}</Text>
-                            </View>
+                            </View> */}
                         </TouchableOpacity>
                     ))}
                 </View>

@@ -271,14 +271,17 @@ export default function App() {
           <MaterialIconButton 
             name="pencil-circle-outline"
             onPress={onClickToggleDrawMode}
+            size="28"
           ></MaterialIconButton>
-          <IoniconButton 
-            name="arrow-undo-circle-outline"
+          {/* <IoniconButton 
+            name="ios-arrow-undo-circle-outline"
             onPress={onClickUndo}
-          ></IoniconButton>
+            size="28"
+          ></IoniconButton> */}
           <MaterialIconButton
             name="delete-circle-outline"
             onPress={onClickClear}
+            size="28"
           ></MaterialIconButton>
         </View>
         <View>
@@ -315,6 +318,11 @@ export default function App() {
 
           )}
         </View>
+          <MaterialIconButton 
+            name="undo" 
+            size={28} 
+            onPress={onClickUndo}
+          />
       </View>
     </View>
 
